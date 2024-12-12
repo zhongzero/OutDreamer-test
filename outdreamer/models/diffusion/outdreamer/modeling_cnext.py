@@ -144,8 +144,8 @@ class OpenSoraCNext(OpenSoraT2V):
     '''
     def _init_patched_inputs_for_inpainting(self):
 
-        assert self.config.sample_size_t is not None, "OpenSoraInpaint over patched input must provide sample_size_t"
-        assert self.config.sample_size is not None, "OpenSoraInpaint over patched input must provide sample_size"
+        assert self.config.sample_size_t is not None, "OpenSoraCNext over patched input must provide sample_size_t"
+        assert self.config.sample_size is not None, "OpenSoraCNext over patched input must provide sample_size"
         #assert not (self.config.sample_size_t == 1 and self.config.patch_size_t == 2), "Image do not need patchfy in t-dim"
 
         self.num_frames = self.config.sample_size_t
@@ -367,7 +367,7 @@ class OpenSoraCNext(OpenSoraT2V):
         Args:
             hidden_states (`torch.LongTensor` of shape `(batch size, num latent pixels)` if discrete, `torch.FloatTensor` of shape `(batch size, channel, height, width)` if continuous):
                 Input `hidden_states`.
-            control_cond: (`torch.FloatTensor` of shape `(batch size, control_in_channels)` if discrete, `torch.FloatTensor` of shape `(batch size, channel, height, width)` if continuous):
+            control_cond: (`torch.LongTensor` of shape `(batch size, control_in_channels)` if discrete, `torch.FloatTensor` of shape `(batch size, channel, height, width)` if continuous):
                 Control condition tensor.
             control_scale: (`float`):
                 Scale factor for control condition tensor.

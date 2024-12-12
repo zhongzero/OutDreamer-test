@@ -1,7 +1,6 @@
 import decord
 import numpy as np
 import torch
-from tqdm import tqdm
 try:
     import torch_npu
     from torch_npu.contrib import transfer_to_npu
@@ -42,7 +41,7 @@ def calculate_fvd(videos1, videos2, mask, device, method='styleganv'):
     # BTCHW -> BCTHW
     # videos -> [batch_size, channel, timestamps, h, w]
     
-    videos2 = videos2 * (1-mask) + videos1 * mask
+    videos2 = videos2 * (1 - mask) + videos1 * mask
 
     videos1 = trans(videos1)
     videos2 = trans(videos2)

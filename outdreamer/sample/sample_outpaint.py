@@ -45,7 +45,7 @@ def main(args):
     vae.vae_scale_factor = ae_stride_config[args.ae]
     
     transformer_model = OpenSoraCNext.from_pretrained(args.model_path, cache_dir=args.cache_dir, 
-                                                    low_cpu_mem_usage=False, device_map=None, torch_dtype=weight_dtype)
+                                                        low_cpu_mem_usage=False, device_map=None, torch_dtype=weight_dtype)
     
     text_encoder = MT5EncoderModel.from_pretrained(args.text_encoder_name, cache_dir=args.cache_dir, low_cpu_mem_usage=True, torch_dtype=weight_dtype)
     tokenizer = AutoTokenizer.from_pretrained(args.text_encoder_name, cache_dir=args.cache_dir)
@@ -118,7 +118,7 @@ def main(args):
     if len(args.origin_video) == 1 and args.origin_video[0].endswith('txt'):
         origin_video_paths = open(args.origin_video[0], 'r').readlines()
         origin_video_paths = [i.strip() for i in origin_video_paths]
-    origin_videos = [readVideo(origin_video_path) for origin_video_path in origin_video_paths]
+        origin_videos = [readVideo(origin_video_path) for origin_video_path in origin_video_paths]
     
     positive_prompt = """
     (masterpiece), (best quality), (ultra-detailed), 
@@ -176,8 +176,8 @@ def main(args):
                             ).images[0]
             # gen_video: (T',H,W,C)
             mask = create_mask(H = args.height, W = args.width, 
-                               mask_ratio_l=args.mask_ratio_l, mask_ratio_r=args.mask_ratio_r,
-                               mask_ratio_u=args.mask_ratio_u, mask_ratio_d=args.mask_ratio_d)
+                               mask_ratio_l = args.mask_ratio_l, mask_ratio_r = args.mask_ratio_r,
+                               mask_ratio_u = args.mask_ratio_u, mask_ratio_d = args.mask_ratio_d)
             if firstGen == None:
                 firstGen = gen_video
             # mask: (H,W,C)

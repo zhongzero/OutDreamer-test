@@ -741,16 +741,16 @@ class OutpaintPipeline(DiffusionPipeline):
         ) # (B,C,t,h,w)
         
         norm_fun = ae_norm[self.ae_type]
-        tranform = transforms.Compose([
+        transform = transforms.Compose([
             ToTensorVideo(),
             norm_fun
         ])
         
         # given_video: (T',C,H',W')
-        # preGen_video: (T2,C,H,W)
+        # preGen_video: (T,C,H,W)
         B, C, T, H, W = batch_size * num_images_per_prompt, given_video.shape[1], num_frames, height, width
-        masked_video = torch.zeros((B, C, T, H, W)).to(torch.uint8)
-        # masked_video: (B,C,T,H,W)
+        masked_video = torch.zeros((B, T, C, H, W)).to(torch.uint8)
+        # masked_video: (B,T,C,H,W)
         T1, _, H1, W1 = given_video.shape
         assert (mask_ratio_l == 0.0 and mask_ratio_r == 0.0) or (mask_ratio_u == 0.0 and mask_ratio_d == 0.0)
         if mask_ratio_l != 0.0 or mask_ratio_r != 0.0:
@@ -767,15 +767,15 @@ class OutpaintPipeline(DiffusionPipeline):
             print(f"mask_ratio_u={mask_ratio_u}, mask_ratio_d={mask_ratio_d}")
         print(f"start_h={start_h}, mask_h_size={mask_h_size}, start_w={start_w}, mask_w_size={mask_w_size}")
         print(f"the input video's shape should be ({mask_h_size}, {mask_w_size})")
-        print(f"the input video's shape will be ({H}, {W})")
+        print(f"the output video's shape will be ({H}, {W})")
         print(f"the input video will be placed on ([{start_h}, {start_h+mask_h_size-1}], [{start_w}, {start_w+mask_w_size-1}]) in the output video")
         masked_video[:, -T1:, :, start_h:start_h+mask_h_size, start_w:start_w+mask_w_size] = given_video
         if preGen_video != None:
-            T = preGen_video.shape[0]
+            T2 = preGen_video.shape[0]
             masked_video[:, :T2] = preGen_video
         masked_video_float = masked_video.clone().to(torch.float32)
         for i in range(B):
-            masked_video_float[i] = tranform(masked_video[i]) # B T C H W -> B T C H W
+            masked_video_float[i] = transform(masked_video[i]) # B T C H W -> B T C H W
         masked_video = masked_video_float
         masked_video = masked_video.transpose(1, 2).to(device) # B T C H W -> B C T H W
         # masked_video: (B,C,T,H,W)

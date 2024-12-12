@@ -26,7 +26,7 @@ def calculate_psnr(videos1, videos2, mask):
     
     assert videos1.shape == videos2.shape
     
-    videos2 = videos2 * (1-mask) + videos1 * mask
+    videos2 = videos2 * (1 - mask) + videos1 * mask
 
     videos1 = trans(videos1)
     videos2 = trans(videos2)
@@ -39,8 +39,8 @@ def calculate_psnr(videos1, videos2, mask):
         video1 = videos1[video_num]
         video2 = videos2[video_num]
         
-        # video1 = F.interpolate(videos1, (256,256), align_corners=False, mode='bilinear')
-        # video2 = F.interpolate(videos2, (256,256), align_corners=False, mode='bilinear')
+        # video1 = F.interpolate(video1, (256,256), align_corners=False, mode='bilinear')
+        # video2 = F.interpolate(video2, (256,256), align_corners=False, mode='bilinear')
 
         psnr_results_of_a_video = []
         for clip_timestamp in range(len(video1)):
@@ -97,7 +97,6 @@ def cal_psnr(GT_video_path, gen_video_path, start_h, target_height, start_w, tar
     print("mask_ratio:", (1 - mask).sum() / torch.ones_like(videos1).sum())
     
     import json
-    device = torch.device("cuda")
     result = calculate_psnr(videos1, videos2, mask)
     print(json.dumps(result, indent=4))
     return result["value"]

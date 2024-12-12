@@ -205,7 +205,8 @@ def main(args: argparse.Namespace):
     if not os.path.exists(args.generated_video_dir):
         os.makedirs(args.generated_video_dir, exist_ok=True)
     
-    data_type = torch.bfloat16
+    # data_type = torch.bfloat16
+    data_type = torch.float16
     
     # ---- Load Model ----
     device = args.device

@@ -16,11 +16,11 @@ def fp32_silu_forward(self, inputs: torch.Tensor) -> torch.Tensor:
 def fp32_gelu_forward(self, inputs: torch.Tensor) -> torch.Tensor:
     return torch.nn.functional.gelu(inputs.float(), approximate=self.approximate).to(inputs.dtype)
 
-def fp32_max_pooled_forward(self, inputs: torch.Tensor, **kwargs) -> torch.Tensor:
+def fp32_max_pool2d_forward(self, inputs: torch.Tensor, **kwargs) -> torch.Tensor:
     return torch.nn.functional.max_pool2d(inputs.float(), **kwargs).to(inputs.dtype)
 
 def replace_with_fp32_forwards():
     nn.GELU.forward = fp32_gelu_forward
     nn.SiLU.forward = fp32_silu_forward
     nn.LayerNorm.forward = fp32_layer_norm_forward
-    torch.max_pool2d = fp32_max_pooled_forward
+    torch.max_pool2d = fp32_max_pool2d_forward

@@ -16,7 +16,7 @@ def timing(f):
         result = f(*args, **kw)
         te = time.time()
         est = te - ts
-        print(f'\t <{f.__name__}> time = {est:.3f} sec')
+        print(f"\t <{f.__name__}> time = {est:.3f} sec")
         return result
     return wrap
 
@@ -29,7 +29,7 @@ def get_contours(mask):
         x_max = max(c[:, :, 0].max(), x_max)
         y_min = min(c[:, :, 1].min(), y_min)
         y_max = max(c[:, :, 1].max(), y_max)
-    return contours,((x_min, y_min), (x_max, y_max))
+    return contours, ((x_min, y_min), (x_max, y_max))
 
 @timing
 def get_blurred_mask(mask, contours = None, strength = 60):
@@ -37,7 +37,7 @@ def get_blurred_mask(mask, contours = None, strength = 60):
     merged = mask.copy()
     if not contours:
         contours, _ = get_contours(mask)
-    for i in range(2,strength):
+    for i in range(2, strength):
         k = (strength - i) / strength
         cv2.drawContours(mask, contours, -1, (255, ), i * 2)
         diff = mask - merged
@@ -58,7 +58,7 @@ def video_stats(video, m):
     return rMean, rStd, gMean, gStd, bMean, bStd
 
 @timing
-def align_color(source_video, template_video, target_video, mask):
+def align_colors(source_video, template_video, target_video, mask):
     m = mask.astype(bool)
     m = np.repeat(np.expand_dims(m,0), 3, axis=0)
     template_video = template_video.astype("float32")
@@ -112,7 +112,7 @@ def align_color(source_video, template_video, target_video, mask):
 
 def match_histograms(source_video, template_video, target_video, mask = None, histSize = 256, accumulate = False):
     mask = mask.astype(bool)
-    mask = np.repeat(np.expand_dims(mask,0), 3, axis=0)
+    mask = np.repeat(np.expand_dims(mask, 0), 3, axis=0)
     mask = mask[...,0]
     ans2 = target_video.copy()
     for i in range(3):
@@ -122,19 +122,19 @@ def match_histograms(source_video, template_video, target_video, mask = None, hi
         src_hist = cv2.calcHist([source_video[..., i].reshape(-1)], [0], None, [histSize], (0, histSize), accumulate=accumulate)[:, 0].astype(np.int32)
         tmpl_hist = cv2.calcHist([template_video[..., i].reshape(-1)], [0], None, [histSize], (0, histSize), accumulate=accumulate)[:, 0].astype(np.int32)
         
-        sqr_quantiles = np.cumsum(src_hist) / np.sum(src_hist)
-        tmpl_quantiles = np.cumsum(tmpl_hist) / np.sum(tmpl_hist)
+        src_quantiles = np.cumsum(src_hist) / sum(src_hist)
+        tmpl_quantiles = np.cumsum(tmpl_hist) / sum(tmpl_hist)
         
-        tmpl_value = np.arrange(0, histSize)
-        interp_a_values = np.interp(sqr_quantiles, tmpl_quantiles, tmpl_value)
+        tmpl_values = np.arange(0, histSize)
+        interp_a_values = np.interp(src_quantiles, tmpl_quantiles, tmpl_values)
         for j in range(len(source_video)):
             src_lookup = source_video[j][:,:,i].reshape(-1)
             interp = interp_a_values[src_lookup]
             source_video[j][:,:,i] = interp.reshape(source_video[j][:,:,i].shape).astype("uint8")
         for j in range(len(ans2)):
-            src_lookup = ans2[j][:,:,i].reshape(-1)
+            src_lookup = ans2[j][...,i].reshape(-1)
             interp = interp_a_values[src_lookup]
-            ans2[j][:,:,i] = interp.reshape(ans2[j][:,:,i].shape).astype("uint8")
+            ans2[j][...,i] = interp.reshape(ans2[j][...,i].shape).astype("uint8")
     return source_video, ans2
 
 
@@ -147,13 +147,13 @@ def align_match(template_video, mask, source_video, target_video, blur_strength 
     
     msk2 = 255 - mask
     if align_color:
-        source_video_result, target_video_result = align_color(source_video.copy(), template_video.copy(), target_video_result, msk2 + 1)
+        source_video_result, target_video_result = align_colors(source_video.copy(), template_video.copy(), target_video_result, msk2 + 1)
     
     if match_hist:
-        source_video_result, target_video_result = match_histograms(source_video_result.copy(), template_video.copy(), target_video_result, msk2 + 1)
+        source_video_result, target_video_result = match_histograms(source_video_result, template_video.copy(), target_video_result, msk2 + 1)
     
     blurred_mask = get_blurred_mask(mask[:, :, 0].copy(), contours, strength=blur_strength)[..., None]
-    blurred_mask = np.repeat(blurred_mask, 3, axis=2)
+    blurred_mask = np.repeat(blurred_mask, 3, axis=-1)
     
     for i in range(len(target_video_result)):
         result = blend_with_mask(target_video_result[i], blurred_mask, target_video[i].copy())
@@ -185,7 +185,7 @@ def create_mask(H, W, mask_ratio_l, mask_ratio_r, mask_ratio_u, mask_ratio_d):
 def refine_video_tensor(video, result_video, mask, align_color = True, match_hist = True):
     # video: (T1,H,W,C)
     # result_video: (T2,H,W,C)
-    # mask: (H,W<C) unmask:0/mask:255
+    # mask: (H,W,C) unmask:0/mask:255
     # video is last T2 frames from previous frames, result_video is current frames, align result_video with video
     video = video.numpy()
     result_video = result_video.numpy()
@@ -196,7 +196,7 @@ def refine_video_tensor(video, result_video, mask, align_color = True, match_his
     template_video = video[0:T2]
     source_video = result_video[0:T2]
     target_video = result_video
-    refine_video = align_match(template_video, mask, source_video, target_video, align_color = align_color, match_hist = match_hist)
+    refine_video = align_match(template_video, mask, source_video, target_video, align_color = align_color, match_hist = match_hist) # result: (H,W,C)
     return torch.from_numpy(refine_video)
 
 
@@ -214,11 +214,11 @@ def refine_video(video_path, result_video_path, save_path, mask, align_color = T
     template_video = video[0:T2]
     source_video = result_video[0:T2]
     target_video = result_video
-    refine_video = align_match(template_video, mask, source_video, target_video, align_color = align_color, match_hist = match_hist)
+    refine_video = align_match(template_video, mask, source_video, target_video, align_color = align_color, match_hist = match_hist) # result: (H,W,C)
     
-    save_dir = save_path[0:save_path.rfind("/")]
+    save_dir = save_path[0:save_path.rfind('/')]
     os.makedirs(save_dir, exist_ok=True)
-    imageio.minwrite(save_path, refine_video, fps=24, quality=6)
+    imageio.mimwrite(save_path, refine_video, fps=24, quality=6)
     print(f"video save in: {save_path}")
     output_video = torch.tensor(np.array(refine_video)).unsqueeze(0) # B(1) T H W C
     # print(output_video.shape)
@@ -246,6 +246,6 @@ if __name__ == "__main__":
     # video_grids = []
     for (video_path, result_video_path, save_path) in zip(video_path_list, result_video_path_list, save_path_list):
         if not os.path.exists(video_path) or not os.path.exists(result_video_path):
-            print(video_path, result_video_path, "not exists")
+            print(video_path, result_video_path, "not exist")
             continue
         video = refine_video(video_path, result_video_path, save_path, mask, align_color = True, match_hist = True, compare_frame = 3)

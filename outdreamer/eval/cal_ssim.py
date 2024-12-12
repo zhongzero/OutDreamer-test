@@ -51,10 +51,10 @@ def calculate_ssim(videos1, videos2, mask):
     print("calculate_ssim...")
 
     # videos [batch_size, timestamps, channel, h, w]
-    
+
     assert videos1.shape == videos2.shape
     
-    videos2 = videos2 * (1-mask) + videos1 * mask
+    videos2 = videos2 * (1 - mask) + videos1 * mask
 
     videos1 = trans(videos1)
     videos2 = trans(videos2)

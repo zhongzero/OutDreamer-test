@@ -495,7 +495,7 @@ def main(args):
                 # _before_ saving state, check if this save would set us over the `checkpoints_total_limit`
                 if accelerator.is_main_process and args.checkpoints_total_limit is not None:
                     save_path = os.path.join(args.output_dir, f"checkpoint-{progress_info.global_step}")
-                    os.makedirs(save_path, exist_ok=True)
+                    os.makedirs(save_path, exist_ok = True)
                     checkpoints = os.listdir(args.output_dir)
                     checkpoints = [d for d in checkpoints if d.startswith("checkpoint")]
                     checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[1]))
@@ -542,7 +542,7 @@ def main(args):
             broadcast(timesteps)
 
         model_input, masked_x, input_mask = model_input[:, 0:C0], model_input[:, C0:2 * C0], model_input[:, 2 * C0:]
-        model_kwargs["contorl_cond"] = torch.cat([masked_x, input_mask], dim=1)
+        model_kwargs["control_cond"] = torch.cat([masked_x, input_mask], dim=1)
         noisy_model_input = noise_scheduler.add_noise(model_input, noise, timesteps)
 
         model_pred = model(
@@ -604,7 +604,7 @@ def main(args):
             else:
                 loss = (loss * mse_loss_weights).mean()
 
-        if timesteps <=200 and noise_scheduler.config.prediction_type == "epsilon":
+        if timesteps <= 200 and noise_scheduler.config.prediction_type == "epsilon":
             alpha_hat = noise_scheduler.alphas_cumprod[timesteps].to(dtype=noisy_model_input.dtype)
             x_0_hat = (noisy_model_input.float() - ((1 - alpha_hat) ** 0.5).float() * model_pred) / (alpha_hat ** 0.5).float()
             # model_input/x_0_hat: (B,C,T,H,W)
@@ -684,7 +684,7 @@ def main(args):
             
             if random.random() < 0.5: # expand left and right
                 start_h, start_w = 0, math.floor(W_ * mask_ratio_l)
-                mash_h_size = H_
+                mask_h_size = H_
                 end_w = math.floor(W_ * mask_ratio_r)
                 mask_w_size = W_ - start_w - end_w
                 print(f"mask_ratio_l={mask_ratio_l}, mask_ratio_r={mask_ratio_r}")

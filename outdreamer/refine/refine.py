@@ -139,7 +139,7 @@ def match_histograms(source_video, template_video, target_video, mask = None, hi
 
 
 @timing
-def align_match(template_video, mask, source_video, target_video, blur_strength = 40, align_color = True, match_hist = False):
+def align_match(template_video, mask, source_video, target_video, blur_strength = 40, align_color = True, match_hist = True):
     source_video_result = source_video.copy()
     target_video_result = target_video.copy()
     

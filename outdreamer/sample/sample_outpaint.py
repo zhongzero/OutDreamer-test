@@ -176,7 +176,7 @@ def main(args):
                             ).images[0]
             # gen_video: (T',H,W,C)
             mask = create_mask(H = args.height, W = args.width, 
-                               mask_ratio_l = args.mask_ratio_l, mask_ratio_r = args.mask_ratio_r,
+                               mask_ratio_l = args.mask_ratio_l, mask_ratio_r = args.mask_ratio_r, 
                                mask_ratio_u = args.mask_ratio_u, mask_ratio_d = args.mask_ratio_d)
             if firstGen == None:
                 firstGen = gen_video

@@ -1,1 +1,1 @@
-exmaples/val_road_long/road.mp4
+examples/val_road_long/road.mp4

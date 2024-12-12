@@ -1,1 +1,1 @@
-exmaples/val_beach/beach.mp4
+examples/val_beach/beach.mp4

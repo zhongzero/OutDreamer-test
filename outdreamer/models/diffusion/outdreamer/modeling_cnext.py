@@ -367,7 +367,7 @@ class OpenSoraCNext(OpenSoraT2V):
         Args:
             hidden_states (`torch.LongTensor` of shape `(batch size, num latent pixels)` if discrete, `torch.FloatTensor` of shape `(batch size, channel, height, width)` if continuous):
                 Input `hidden_states`.
-            control_cond: (`torch.LongTensor` of shape `(batch size, control_in_channels)` if discrete, `torch.FloatTensor` of shape `(batch size, channel, height, width)` if continuous):
+            control_cond: (`torch.LongTensor` of shape `(batch size, control in_channels)` if discrete, `torch.FloatTensor` of shape `(batch size, channel, height, width)` if continuous):
                 Control condition tensor.
             control_scale: (`float`):
                 Scale factor for control condition tensor.

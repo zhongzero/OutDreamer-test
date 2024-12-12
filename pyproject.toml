@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "OutDreamer"
 version = "1.0.0"
-description = "Appliation of OutDreamer"
+description = "Application of OutDreamer"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [

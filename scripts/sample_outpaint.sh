@@ -1,6 +1,6 @@
 model_path="checkpoint_outpaint/checkpoint-10000/model"
 cache_dir="pretrained_models/cache_dir"
-ae_path="pretrained_models/models--LanguageBind--OpenSora-Plan-v1.2.0/vae"
+ae_path="pretrained_models/models--LanguageBind--Open-Sora-Plan-v1.2.0/vae"
 
 python outdreamer/sample/sample_outpaint.py \
     --origin_video "examples/val_beach/video_val_beach.txt" \
@@ -12,7 +12,7 @@ python outdreamer/sample/sample_outpaint.py \
     --text_encoder_name google/mt5-xxl \
     --text_prompt "examples/val_beach/prompt_val_beach.txt" \
     --ae CausalVAEModel_D4_4x8x8 \
-    --ae_path "/path/to/causalvideovae" \
+    --ae_path $ae_path \
     --save_video_path "./results/beach-output.mp4" \
     --guidance_scale 3 \
     --num_sampling_steps 100 \
@@ -33,9 +33,9 @@ python outdreamer/sample/sample_outpaint.py \
 #     --width 640 \
 #     --cache_dir $cache_dir \
 #     --text_encoder_name google/mt5-xxl \
-#     --text_prompt examples/val_road_long/prompt_val_road.txt \
+#     --text_prompt "examples/val_road_long/prompt_val_road.txt" \
 #     --ae CausalVAEModel_D4_4x8x8 \
-#     --ae_path "/path/to/causalvideovae" \
+#     --ae_path $ae_path \
 #     --save_video_path "./results/road-output.mp4" \
 #     --guidance_scale 3 \
 #     --num_sampling_steps 100 \

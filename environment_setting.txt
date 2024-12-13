@@ -1,7 +1,0 @@
-conda create -n outdreamer python=3.8 -y
-conda activate outdreamer
-pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
-pip install xformers==0.0.22.post7 --index-url https://download.pytorch.org/whl/cu118
-pip install -e .
-pip install -e ".[train]"
-pip install -e ".[dev]"

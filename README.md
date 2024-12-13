@@ -1,14 +1,12 @@
 # OutDreamer
 
+https://github.com/user-attachments/assets/1de99952-eb16-4e9f-9703-12e962138e10
+
 
 
 ![overview.jpg](assets/overview.jpg)
 
-
-
-https://github.com/user-attachments/assets/1de99952-eb16-4e9f-9703-12e962138e10
-
-
+We propose OutDreamer, a DiT-based framework with efficient condition injection for video outpainting. Our method can generate high-quality video frames, preserving temporal and color consistency, and use iterative method for long video outpainting.
 
 ### Setup
 
@@ -39,7 +37,7 @@ You can run the example training code with the following command:
 bash scripts/train_outpaint.sh
 ```
 
-The example training process is based on two example video datas in `data/train_data/` as well as its meta json file in `data/data_json.json`. 
+The example training process is demonstrated using two example video data in `data/train_data/` as well as its meta json file in `data/data_json.json`. 
 
 You can simply place the video data into the `data/train_data/` directory and update the `data/data_json.json` file according to the template in actual training. The video data used in our experiments is sourced from https://huggingface.co/datasets/LanguageBind/Open-Sora-Plan-v1.1.0/tree/main/pexels 
 

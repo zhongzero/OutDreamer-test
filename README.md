@@ -2,7 +2,9 @@
 
 
 
-### Results
+![overview.jpg](assets/overview.jpg)
+
+
 
 
 
@@ -29,11 +31,29 @@ pip install -e ".[dev]"
 
 ### train
 
+You can run the example training code with the following command:
 
+```
+bash scripts/train_outpaint.sh
+```
 
-### sample
+The example training process is based on two example video datas in `data/train_data/` as well as its meta json file in `data/data_json.json`. 
 
+You can simply place the video data into the `data/train_data/` directory and update the `data/data_json.json` file according to the template in actual training. The video data used in our experiments is sourced from https://huggingface.co/datasets/LanguageBind/Open-Sora-Plan-v1.1.0/tree/main/pexels 
 
+Please refer to `scripts/train_outpaint.sh` for more training details.
+
+### Inference
+
+After the training process,  you can run the example inference code with the following command:
+
+```
+bash scripts/sample_outpaint.sh
+```
+
+We provide two examples for sampling, and please refer to `scripts/sample_outpaint.sh` for more inference details.
+
+Due to company policy, we are unable to provide the pre-trained OutDreamer model weights. Please train the model yourself using the provided training scripts.
 
 
 

@@ -1,13 +1,18 @@
+cache_dir="pretrained_models/cache_dir"
+ae_path="pretrained_models/models--LanguageBind--OpenSora-Plan-v1.2.0/vae"
+pretrained="pretrained_models/models--LanguageBind--OpenSora-Plan-v1.2.0/29x720p/diffusion_pytorch_model.safetensor"
+output_dir="checkpoint_outpaint"
+
 accelerate launch \
     --config_file scripts/accelerate_configs/deepspeed_zero2_config.yaml \
     outdreamer/train/train_videoOutpaint_diffusers.py \
     --model OpenSoraCNext-ROPE-L/122 \
     --text_encoder_name google/mt5-xxl \
-    --cache_dir "./cache_dir" \
+    --cache_dir $cache_dir \
     --dataset t2v \
-    --data "scripts/train_data/data_pexels.txt" \
+    --data "data/data_path.txt" \
     --ae CausalVAEModel_D4_4x8x8 \
-    --ae_path "/path/to/vae" \
+    --ae_path $ae_path \
     --sample_rate 1 \
     --num_frames 29 \
     --max_height 480 \
@@ -26,7 +31,7 @@ accelerate launch \
     --lr_warmup_steps=0 \
     --mixed_precision="bf16" \
     --report_to="wandb" \
-    --pretrained "/path/to/pretrained-model" \
+    --pretrained $pretrained \
     --checkpoints_total_limit 30 \
     --checkpointing_steps 1000 \
     --resume_from_checkpoint="latest" \
@@ -44,5 +49,5 @@ accelerate launch \
     --enable_tiling \
     --speed_factor 1.0 \
     --group_frame \
-    --output_dir="/path/to/output" \
+    --output_dir $output_dir \
     --given_frame_max_num 3

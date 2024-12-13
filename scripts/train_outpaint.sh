@@ -1,6 +1,6 @@
 cache_dir="pretrained_models/cache_dir"
 ae_path="pretrained_models/models--LanguageBind--Open-Sora-Plan-v1.2.0/vae"
-pretrained="pretrained_models/models--LanguageBind--Open-Sora-Plan-v1.2.0/29x720p/diffusion_pytorch_model.safetensor"
+pretrained="pretrained_models/models--LanguageBind--Open-Sora-Plan-v1.2.0/29x720p/diffusion_pytorch_model.safetensors"
 output_dir="checkpoint_outpaint"
 
 accelerate launch \
